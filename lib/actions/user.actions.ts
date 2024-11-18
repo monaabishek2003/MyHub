@@ -53,7 +53,6 @@ export const createAccount = async ({
 
   if (!existingUser) {
     const { databases } = await createAdminClient();
-
     await databases.createDocument(
       appwriteConfig.databaseId,
       appwriteConfig.usersCollectionId,
@@ -78,6 +77,8 @@ export const verifySecret = async ({
   password: string;
 }) => {
   try {
+    console.log(accountId, password);
+    
     const { account } = await createAdminClient();
 
     const session = await account.createSession(accountId, password);

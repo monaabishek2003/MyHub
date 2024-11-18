@@ -26,6 +26,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             width={342}
             height={342}
             className="transition-all hover:rotate-2 hover:scale-105"
+            priority={true} 
           />
         </div>
       </section>
