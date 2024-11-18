@@ -17,47 +17,69 @@ import {
 import { Input } from "@/components/ui/input"
 import Image  from 'next/image'
 import Link from 'next/link'
+import { createAccount } from '@/lib/actions/user.actions'
+import { log } from 'console'
+import OtpModal from './OtpModal'
  
 
-const formSchema = z.object({
-  username: z.string().min(2).max(50),
-})
 
-type formType = "sign-in" | "sign-up"
+type FormType = "sign-in" | "sign-up"
 
+const authFormSchema = (formType : FormType) => {
+  return z.object({
+    email : z.string().email(),
+    fullName : formType === "sign-up" ? z.string().min(2).max(50) : z.string().optional()
+  })
+}
 
-const AuthForm = ({type}:{type : formType}) => {
+const AuthForm = ({type}:{type : FormType}) => {
 
-  const [isLoading,setIsLoading] = useState(false)
-  const [errorMsg,setErrorMsg] = useState("")
+  const [isLoading,setIsLoading] = useState(false);
+  const [errorMsg,setErrorMsg] = useState("");
+  const [accountId,setaccountId] = useState("")
 
+  const formSchema = authFormSchema(type)
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      email : "" , fullName : ""
     },
   })
   
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values.fullName);
+    
+    setErrorMsg("");
+    setIsLoading(true);
+    try{
+      const user = await createAccount({
+        fullName : values.fullName || "",
+        email : values.email
+      });
+
+      setaccountId(user.accountId);
+    }catch{
+      setErrorMsg("Failed to create Account, Try again");
+    }finally{
+      setIsLoading(false);
+    }
   }
   return (
+    <>
     <Form {...form}>
-    <form onSubmit={form.handleSubmit(onSubmit)} className="auth-form">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="auth-form ">
       <h1 className='form-title'>
         {type==="sign-in"?"Sign In":"Sign Up"}
       </h1>
-      <FormField
+      {type==="sign-up" && <FormField
         control={form.control}
-        name="username"
+        name="fullName"
         render={({ field }) => (
           <FormItem>
             <div className="shad-form-item">
-              <FormLabel className="shad-form-label">Username</FormLabel>
+              <FormLabel className="shad-form-label">Full Name</FormLabel>
               <FormControl>
                 <Input className="shad-input" placeholder="Enter your Name" {...field} />
               </FormControl>
@@ -65,7 +87,7 @@ const AuthForm = ({type}:{type : formType}) => {
             </div>
           </FormItem>
         )}
-      />
+      />}
       <FormField
         control={form.control}
         name="email"
@@ -90,7 +112,7 @@ const AuthForm = ({type}:{type : formType}) => {
             alt="loader"
             width={24}
             height={24}
-            className="animate-spin ml-2"
+            className=" ml-2"
           />
         }
       </Button>
@@ -99,16 +121,19 @@ const AuthForm = ({type}:{type : formType}) => {
           {errorMsg}
         </p>
       }
-      <div>
-        <p>
+      <div className='body-2 flex justify-center'>
+        <p className="text-light-100">
           {type==="sign-in"? "Don't have an Account":"Already have an Account"}
         </p>
-        <Link>
-          {type==="sign-in"?"Sign In":"Sign Up"}
+        <Link href={type==="sign-in"?"/sign-up":"/sign-in"} className="ml-2 font-medium text-brand">
+          {type==="sign-in"?"Sign Up":"Sign In"}
         </Link>
       </div>
+
     </form>
   </Form>
+  <OtpModal/>
+  </>
   )
 }
 
