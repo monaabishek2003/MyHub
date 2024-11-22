@@ -20,6 +20,7 @@ import Link from 'next/link'
 import { createAccount } from '@/lib/actions/user.actions'
 import { log } from 'console'
 import OtpModal from './OtpModal'
+import { signInUser } from '@/lib/actions/user.actions'
  
 
 
@@ -54,11 +55,15 @@ const AuthForm = ({type}:{type : FormType}) => {
     setErrorMsg("");
     setIsLoading(true);
     try{
-      const user = await createAccount({
-        fullName : values.fullName || "",
-        email : values.email
-      });
+      const user =
+        type === "sign-up"
+          ? await createAccount({
+              fullName: values.fullName || "",
+              email: values.email,
+            })
+          : await signInUser({ email: values.email });
 
+      if(user.accountId===null) throw new Error(user.error)
       setaccountId(user.accountId);
     }catch{
       setErrorMsg("Failed to create Account, Try again");

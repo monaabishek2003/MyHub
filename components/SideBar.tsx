@@ -7,11 +7,11 @@ import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 
 interface sidebarProps {
-  fullName : string,
+  fullname : string,
   avatar : string,
   email : string
 }
-const SideBar = ({fullName, avatar, email} : sidebarProps) => {
+const SideBar = ({fullname, avatar, email} : sidebarProps) => {
   const pathname = usePathname();
   return (
     <aside className="sidebar">
@@ -60,20 +60,20 @@ const SideBar = ({fullName, avatar, email} : sidebarProps) => {
       <Image
         src="/assets/images/files-2.png"
         alt="logo"
-        width={406}
-        height={318}
+        width={306}
+        height={218}
         className="w-full"
       />
       <div className="sidebar-user-info">
         <Image
-          src={''}
-          alt={avatar ?? ""}
+          src="/assets/images/avatar.png"
+          alt="avatar"
           width={44}
           height={44}
           className="sidebar-user-avatar"
         />
         <div className="hidden lg:block">
-          <p className="subtitle-2 capitalize">{fullName}</p>
+          <p className="subtitle-2 capitalize">{fullname}</p>
           <p className="caption">{email}</p>
         </div>
       </div>
