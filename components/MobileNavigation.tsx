@@ -16,6 +16,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
 import { signOutUser } from '@/lib/actions/user.actions';
+import FileUploader from './FileUploader';
 
 
 interface mobileNavProps {
@@ -92,7 +93,7 @@ const MobileNavigation = ({ownerId, avatar, email, fullname} : mobileNavProps) =
             <Separator className="my-5 bg-light-200/20" />
 
           <div className="flex flex-col justify-between gap-5 pb-5">
-            FILEUPLASD
+            <FileUploader/>
             <Button
               type="submit"
               className="mobile-sign-out-button"
