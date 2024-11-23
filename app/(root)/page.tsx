@@ -11,3 +11,7 @@ const App = () => {
 }
 
 export default App;
+//signin page
+//login error handlings
+//fileupload loading
+//drag and dropzone creation

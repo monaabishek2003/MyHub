@@ -20,13 +20,14 @@ import FileUploader from './FileUploader';
 
 
 interface mobileNavProps {
-  ownerId : string,
+  $id: string;
+  accountId: string;
   avatar : string,
   email : string,
   fullname : string
 }
 
-const MobileNavigation = ({ownerId, avatar, email, fullname} : mobileNavProps) => {
+const MobileNavigation = ({$id: ownerId, accountId, avatar, email, fullname} : mobileNavProps) => {
   const [open,setOpen] = useState(false);
   const pathname = usePathname()
   return (
@@ -93,7 +94,7 @@ const MobileNavigation = ({ownerId, avatar, email, fullname} : mobileNavProps) =
             <Separator className="my-5 bg-light-200/20" />
 
           <div className="flex flex-col justify-between gap-5 pb-5">
-            <FileUploader/>
+            <FileUploader ownerId={ownerId} accountId={accountId}/>
             <Button
               type="submit"
               className="mobile-sign-out-button"
