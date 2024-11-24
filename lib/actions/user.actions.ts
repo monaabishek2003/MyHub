@@ -107,7 +107,7 @@ export const getCurrentUser = async () => {
       appwriteConfig.usersCollectionId,
       [Query.equal("accountId", result.$id)],
     );
-
+    
     if (user.total <= 0) return null;
     return parseStringify(user.documents[0]);
   } catch (error) {
