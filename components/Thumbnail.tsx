@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { cn, getFileIcon } from "@/lib/utils";
 
-interface Props {
+interface ThumbnailProps {
   type: string;
   extension: string;
   url?: string;
@@ -16,7 +16,7 @@ export const Thumbnail = ({
   url = "",
   imageClassName,
   className,
-}: Props) => {
+}: ThumbnailProps) => {
   const isImage = type === "image" && extension !== "svg";
 
   return (
